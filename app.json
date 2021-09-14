@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Anubis-Companion",
+    "slug": "Anubis-Companion",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "Anubis-Companion"
+}
