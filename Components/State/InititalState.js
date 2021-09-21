@@ -1,4 +1,5 @@
 export const initialState = {
+    isLoading: 'false',
     isSignedIn: null,
     battleTag: null,
     topThreeStats: [], // in the form: [{onFire: 20%}]

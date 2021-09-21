@@ -1,26 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import {SummaryScreen} from "./Components/Screens/SummaryScreen";
-import {RankingScreen} from "./Components/Screens/RankingScreen";
-import {Login} from "./Components/Authentication/Login";
-import {DetailScreen} from "./Components/Screens/DetailScreen";
-import {ProfileScreen} from "./Components/Screens/ProfileScreen";
+import React, {useContext, useEffect, useState} from 'react';
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import {AnubisProvider} from "./Components/State/Provider";
+import * as eva from '@eva-design/eva';
+import {Routing} from "./Components/Routing";
+import {light} from "@eva-design/eva";
+
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
+    useEffect(()=>{
 
+    }, )
   return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={Login}/>
-          <Stack.Screen name="Summary" component={SummaryScreen}/>
-          <Stack.Screen name="Ranking" component={RankingScreen}/>
-          <Stack.Screen name="Detail" component={DetailScreen}/>
-          <Stack.Screen name="Profile" component={ProfileScreen}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ApplicationProvider {...eva} theme={eva.dark}>
+          <AnubisProvider>
+             <Routing/>
+          </AnubisProvider>
+      </ApplicationProvider>
   );
 }
 
