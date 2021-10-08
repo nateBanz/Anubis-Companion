@@ -1,9 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { ApplicationProvider, Layout } from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry, Layout} from '@ui-kitten/components';
 import {AnubisProvider} from "./Components/State/Provider";
 import * as eva from '@eva-design/eva';
 import {Routing} from "./Components/Routing";
-import {light} from "@eva-design/eva";
 import {ImageBackground} from "react-native";
 import {View, Text} from "react-native";
 
@@ -13,7 +12,7 @@ export default function App() {
 
 
     return (
-
+        <>
              <ApplicationProvider {...eva} theme={eva.dark}>
 
                   <AnubisProvider>
@@ -30,7 +29,7 @@ export default function App() {
                   </AnubisProvider>
 
              </ApplicationProvider>
-
+        </>
       // <View style = {styles.container}>
       //     <ImageBackground source = {require('./Components/Assets/backgroundOverwatch.png')} resizeMode = 'cover' style = {styles.backgroundImage}>
       //
