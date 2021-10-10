@@ -13,6 +13,7 @@ import {TextInput, TouchableOpacity} from "react-native-gesture-handler";
 import {Formik} from "formik";
 
 export const SignIn = ({navigation}) => {
+    //write a function to get the users profile to check if they already have data in the database. If so set sign in
 const [firstLogIn, setFirstLogIn] = useState(false)
 const { state: { userId }, dispatch } = useContext(AnubisContext)
 
@@ -68,8 +69,8 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                     width: 325,
                     height: 420}}>
                     <Formik
-                        initialValues={{ name: '' , number: ''}}
-                        onSubmit={console.log('Logging In')}
+                        initialValues={{ name: '' , password: ''}}
+                        onSubmit={()=>console.log('Logging In')}
                     >
                         {({ handleChange, handleBlur, handleSubmit, values })=>(
                     <View

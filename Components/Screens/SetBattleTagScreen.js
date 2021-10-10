@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, Button} from "react-native";
 import OverLogo from "../Assets/OverLogo";
 import {GoogleLoginButton} from "react-social-login-buttons";
@@ -6,8 +6,20 @@ import {SafeAreaView} from "react-native";
 import { Layout, Text} from "@ui-kitten/components";
 import { Formik } from 'formik';
 import {TextInput, TouchableOpacity} from "react-native-gesture-handler";
+import {AnubisContext} from "../State/Context";
 
 export const SetBattleTagScreen = () => {
+    const { state: { userId }, dispatch } = useContext(AnubisContext)
+    const [error, setError] = useState(false)
+
+   //if error, return error on this screen
+    let Error = (message) => {
+        return (
+            <Text style = {{textColor: 'red', color: 'red'}}>
+                {message}
+            </Text>
+        )
+    }
 
     return (
         <SafeAreaView>
@@ -25,13 +37,14 @@ export const SetBattleTagScreen = () => {
 
                 <Formik
                     initialValues={{ name: '' , number: ''}}
-                    onSubmit={values => { let fullTag = values.name + '-' + values.number;
+                    onSubmit={values => {let fullTag = values.name + '-' + values.number; console.log(fullTag);
                         fetch('http://192.168.86.58:3000/login/python/',
                             {method: 'POST',
                                 body: JSON.stringify({fullTag}),
-                                headers: {'Content-Type': 'application/json'}}).
-                        then((res) => res.json()).
-                        then(final => console.log(final))
+                                headers: {'Content-Type': 'application/json'}})
+                            .then((res) => res.json())
+                            .catch(err => console.log(err))
+                            .then(final => {console.log(final); dispatch({isSignedIn: true}) })
                     }}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -104,6 +117,7 @@ export const SetBattleTagScreen = () => {
 
 
                             </Layout>
+                            {error && Error('Oh no! Make sure you set your profile to public!') }
 
                         </>
 
