@@ -133,6 +133,13 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                     </View>
                         )}
                     </Formik>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                        <View>
+                            <Text style={{width: 50, textAlign: 'center', fontSize: 18}}>or</Text>
+                        </View>
+                        <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                    </View>
                     <View style ={{borderRadius: 20}}>
                         <GoogleSocialButton
                             buttonViewStyle =  {{

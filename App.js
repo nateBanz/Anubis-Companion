@@ -16,16 +16,9 @@ export default function App() {
              <ApplicationProvider {...eva} theme={eva.dark}>
 
                   <AnubisProvider>
-                      <View style={{  flex: 1,
-                      flexDirection: "column"}}>
-                      <ImageBackground source={require('./Components/Assets/backgroundOverwatch.png')} style={{
-                          flex: 1,
-                          resizeMode: "cover",
-                          justifyContent: "center"
-                      }}>
-                     <Routing/>
-                      </ImageBackground>
-                      </View>
+                      <Layout style = {{height: '100%'}}>
+                        <Routing/>
+                      </Layout>
                   </AnubisProvider>
 
              </ApplicationProvider>

@@ -28,26 +28,20 @@ export const Routing = () => {
     return (
         <View style={{  flex: 1,
             flexDirection: "column"}}>
-            <ImageBackground source={require('./Assets/backgroundOverwatch.png')} style={{
-                flex: 1,
-                resizeMode: "cover",
-                justifyContent: "center"
-            }}>
             <NavigationContainer theme = {MyTheme}>
                 {!isSignedIn ?
+                        <Stack.Navigator>
+                            <>
+                                <Stack.Screen name="Login" component={Login} options={{
+                                    headerShown: false,
+                                }}/>
+                                <Stack.Screen name="SetBattleTagScreen" component={SetBattleTagScreen} options={{
+                                    headerShown: false,
+                                }}/>
 
-                    <Stack.Navigator>
-                        <>
-                            <Stack.Screen name="Login" component={Login} options={{
-                                headerShown: false,
-                            }}/>
-                            <Stack.Screen name="SetBattleTagScreen" component={SetBattleTagScreen} options={{
-                                headerShown: false,
-                            }}/>
+                            </>
 
-                        </>
-
-                    </Stack.Navigator>
+                        </Stack.Navigator>
                     :
                     <Tab.Navigator
                         appearance={{
@@ -57,13 +51,20 @@ export const Routing = () => {
                             whenInactiveShow: 'icon-only',
 
                         }}
+                        screenOptions = {{
+                            headerTitleStyle: {
+                                fontWeight: 'bolder'
+                            }
+                        }}
                     >
                         <Tab.Screen name="Skill Rating" component={RankingScreen} options={{
+                                title: 'Suggested Ranking',
                                 tabBarIcon: ({ focused, color, size }) => (
                                 <Ionicons name="home-outline" size={18} color="#ffffff" />
                             )
                         }}/>
                         <Tab.Screen name="Suggestions" component={DetailScreen} options={{
+                                title: 'Stats Summary',
                                 tabBarIcon: ({ focused, color, size }) => (
                                 <Ionicons name="analytics" size={18} color="#ffffff" />
                             )
@@ -76,7 +77,6 @@ export const Routing = () => {
                     </Tab.Navigator>
                 }
             </NavigationContainer>
-            </ImageBackground>
         </View>
     )
 }

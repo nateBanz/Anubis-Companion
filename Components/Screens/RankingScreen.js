@@ -1,89 +1,123 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View} from "react-native";
 import {SafeAreaView} from "react-native";
 import {Layout} from "@ui-kitten/components";
+import {TopHeaderBar} from "../Assets/TopHeaderBar";
+import {Image} from "react-native";
+import {TouchableOpacity} from "react-native-gesture-handler";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 export const RankingScreen = (props) => {
-    const modifiedCard = () => {
+    const [number, setNumber] = useState([0,2000,4000])
+    const header = (title) => {
         return (
-            <View style = {{flex: 1, height: '100%', width: '100%'}}>
-                <View style = {{
-                    flex: 1,
-                    width: '75%',
-                    borderRadius: 30,
-                    justifyContent: 'center',
-                    backgroundColor: '#ffffff'
-                            }}>
-                    <Text>Suggested Rankings</Text>
-                </View>
-                <View style = {{
-                    flex: 5,
-                    elevation: 4,
-                    shadowColor: 'black',
-                    shadowOpacity: 0.2,
-                    shadowOffsetY: 4,
-                    shadowOffsetX: 0,
-                    width: '85%',
-                    borderRadius: 20,
-                    alignItems: 'center',
-                    }}>
-
-                </View>
-                    <View style = {{flex: 1, flexDirection: 'row'}}>
-                        <Text>Tank Skill Rating</Text>
-                    </View>
-                    <View style = {{flex: 1, flexDirection: 'row'}}>
-                        <Text>Dps Skill Rating</Text>
-                    </View>
-                    <View style = {{flex: 1, flexDirection: 'row'}}>
-                        <Text>Support Skill Rating</Text>
-                    </View>
+        <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
+            <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
+            <View>
+                <Text style={{ textAlign: 'center', color: 'white', fontSize: 18}}>{title}</Text>
             </View>
+            <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
+        </View>
         )
     }
-    return (
-        <SafeAreaView style = {{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-            <Layout style = {{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: -80}}>
-                <View style = {{
-                    marginTop: 5,
-                    width: '75%',
-                    borderRadius: 40,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#ffffff',
-                    elevation: 3,
-                    height: 40
+    const determinePath = (num)=> {
+        if(num<1500) {
+            console.log('bronze')
+            return require('../Assets/bronze.png')
+        }
+        else if(num >= 1500 && num < 2000) {
+            return require('../Assets/silver.png')
+        }
+        else if(num >= 2000 && num < 2500) {
+            return require('../Assets/gold.png')
+        }
+        else if(num >= 2500 && num < 3000) {
+            return require('../Assets/platinum.png')
+        }
+        else if(num >= 3000 && num < 3500) {
+            return require('../Assets/diamond.png')
+        }
+        else if(num >= 3500 && num < 4000) {
+            return require('../Assets/master.png')
+        }
+        else if(num >= 4000) {
+            return require('../Assets/grandmaster.png')
+        }
+    }
+    useEffect(()=>{
 
-                }}>
-                    <Text style = {{fontSize: 18, fontWeight: 'bold'}}>Suggested Rankings</Text>
-                </View>
-                <Layout style = {{
-                    marginTop: -4,
-                    elevation: 2,
+    }, [])
+
+    let tankPath = determinePath(number[0])
+    let dpsPath = determinePath(number[1])
+    let supportPath = determinePath(number[2])
+
+
+    return (
+        <SafeAreaView>
+            <View style = {{justifyContent: 'center', alignItems: 'center'}}>
+                <TopHeaderBar title = 'Suggested Ranking'></TopHeaderBar>
+            </View>
+
+                <View style = {{
+                    elevation: 4,
                     shadowColor: 'black',
-                    shadowOpacity: 0.2,
-                    shadowOffsetY: 4,
-                    shadowOffsetX: 0,
+                    shadowOpacity: 0.5,
+                    shadowOffsetY: 0,
+                    shadowOffsetX: 5,
                     width: '95%',
-                    height: '65%',
+                    height: 400,
                     borderRadius: 20,
-                    alignItems: 'center',
-                    padding: 10
+                    alignItems: 'flex-start',
+                    padding: 10,
+                    marginLeft: 10,
+                    backgroundColor: '#536382'
                 }}>
-                    <View style = {{flex: 1, marginTop: 40, marginBottom: 10}}>
-                        <View style = {{flex: 1, flexDirection: 'row'}}>
-                            <Text>Tank Skill Rating</Text>
+                    <View style = {{flex: 1, marginTop: 20, marginBottom: 10, padding: 10}}>
+                        {header('Tank')}
+                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center', padding: 10}}>
+                            {tankPath !== null && <Image source= {tankPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
                         </View>
-                        <View style = {{flex: 1, flexDirection: 'row'}}>
-                            <Text>Dps Skill Rating</Text>
+                        {header('DPS')}
+                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center' , padding: 10}}>
+                            {dpsPath !== null && <Image source= {dpsPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
                         </View>
-                        <View style = {{flex: 1, flexDirection: 'row'}}>
-                            <Text>Support Skill Rating</Text>
+                        {header('Support')}
+                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center', padding: 10}}>
+                            {supportPath !== null && <Image source= {supportPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
+                            <Text>^50</Text>
                         </View>
                     </View>
-                </Layout>
+                </View>
+                <View>
+                    <Text>Your suggested score based on your skills like damage done, healing and damage blocked over time</Text>
+                    <Text>See how you can improve!</Text>
 
-            </Layout>
+                    <TouchableOpacity
+                        style={{marginTop: 18,
+                            backgroundColor:'#C66C3B',
+                            borderRadius:30,
+                            paddingLeft: 44,
+                            paddingRight: 44,
+                            paddingTop: 12,
+                            paddingBottom: 12,
+                            borderColor: '#C66C3B',
+
+                        }}
+                        activeOpacity = { .5 }
+                        onPress={console.log('next')}
+                    >
+
+                        <Text category= 'h6'> <MaterialCommunityIcons name="page-next-outline" size={24} color="black" /> </Text>
+
+                    </TouchableOpacity>
+                </View>
         </SafeAreaView>
     )
 }
