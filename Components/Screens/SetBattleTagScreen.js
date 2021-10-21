@@ -7,21 +7,25 @@ import { Layout, Text} from "@ui-kitten/components";
 import { Formik } from 'formik';
 import {TextInput, TouchableOpacity} from "react-native-gesture-handler";
 import {AnubisContext} from "../State/Context";
+import {LoadingScreen} from "./LoadingScreen";
 
 export const SetBattleTagScreen = () => {
-    const { state: { userId }, dispatch } = useContext(AnubisContext)
+    const { state: { userId, isLoading }, dispatch } = useContext(AnubisContext)
     const [error, setError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState(null)
 
    //if error, return error on this screen
     let Error = (message) => {
+        dispatch({isLoading: false})
         return (
-            <Text style = {{textColor: 'red', color: 'red'}}>
-                {message}
+            <Text style = {{color: 'red'}}>
+                {message + ' Try Again!'}
             </Text>
         )
     }
 
     return (
+
         <SafeAreaView>
             <Layout style = {{
                 alignItems: 'center',
@@ -37,14 +41,33 @@ export const SetBattleTagScreen = () => {
 
                 <Formik
                     initialValues={{ name: '' , number: ''}}
-                    onSubmit={values => {let fullTag = values.name + '-' + values.number; console.log(fullTag);
-                        fetch('http://192.168.86.58:3000/login/python/',
+                    onSubmit={values => {
+                        dispatch({isLoading: true});
+                        let fullTag = values.name + '-' + values.number;
+                        console.log(fullTag);
+                        fetch('http://192.168.86.66:3000/login/python/',
                             {method: 'POST',
-                                body: JSON.stringify({fullTag}),
+                                body: JSON.stringify({fullTag, userId}),
                                 headers: {'Content-Type': 'application/json'}})
                             .then((res) => res.json())
                             .catch(err => console.log(err))
-                            .then(final => {console.log(final); dispatch({isSignedIn: true}) })
+                            .then(
+                                (final) => {
+                                if(final.hasOwnProperty('error')) {
+                                    setError(true)
+                                    setErrorMessage(final.error)
+                                }
+                                else {
+                                    setError(false)
+                                    dispatch({isSignedIn: true})
+                                    dispatch({battleTag: fullTag });
+                                    dispatch ({rankings: JSON.parse(final[0])});
+                                    dispatch({suggestedRanking: JSON.parse(final[1]) });
+                                    dispatch({topThreeStats: JSON.parse(final[2]) });
+                                    dispatch({bottomThreeStats: JSON.parse(final[3]) })}
+                                    dispatch({isLoading: false})
+
+                                 })
                     }}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -89,7 +112,6 @@ export const SetBattleTagScreen = () => {
                         />
 
                             </Layout>
-
                             <Layout style ={{borderRadius: 30, flex: 1}}>
 
                                 <TouchableOpacity
@@ -105,6 +127,7 @@ export const SetBattleTagScreen = () => {
 
 
 
+
                                     }}
                                     activeOpacity = { .5 }
                                     onPress={ handleSubmit }
@@ -114,10 +137,10 @@ export const SetBattleTagScreen = () => {
 
                                 </TouchableOpacity>
 
-
-
+                                {isLoading && <LoadingScreen/>}
+                                {error && Error(errorMessage) }
                             </Layout>
-                            {error && Error('Oh no! Make sure you set your profile to public!') }
+
 
                         </>
 

@@ -1,6 +1,6 @@
 export const initialState = {
-    isLoading: false,
-    isSignedIn: true,
+    isLoading: null,
+    isSignedIn: false,
     userId: null,
     battleTag: null,
     topThreeStats: [], // in the form: [{onFire: 20%}]

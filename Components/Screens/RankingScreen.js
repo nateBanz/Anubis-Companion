@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Text, View} from "react-native";
 import {SafeAreaView} from "react-native";
 import {Layout} from "@ui-kitten/components";
@@ -6,9 +6,12 @@ import {TopHeaderBar} from "../Assets/TopHeaderBar";
 import {Image} from "react-native";
 import {TouchableOpacity} from "react-native-gesture-handler";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {AnubisContext} from "../State/Context";
+import {LoadingScreen} from "./LoadingScreen";
 
 export const RankingScreen = (props) => {
     const [number, setNumber] = useState([0,2000,4000])
+    const { state: { isLoading }, dispatch } = useContext(AnubisContext)
     const header = (title) => {
         return (
         <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
@@ -52,14 +55,16 @@ export const RankingScreen = (props) => {
     let dpsPath = determinePath(number[1])
     let supportPath = determinePath(number[2])
 
+    const Ranking = () => {
+        return (
+            <SafeAreaView>
+                <View style = {{justifyContent: 'center', alignItems: 'center'}}>
+                    <TopHeaderBar title = 'Suggested Ranking'></TopHeaderBar>
+                </View>
 
-    return (
-        <SafeAreaView>
-            <View style = {{justifyContent: 'center', alignItems: 'center'}}>
-                <TopHeaderBar title = 'Suggested Ranking'></TopHeaderBar>
-            </View>
-
-                <View style = {{
+                { isLoading ? <LoadingScreen loading = {true}/> :
+                    <>
+                    <View style={{
                     elevation: 4,
                     shadowColor: 'black',
                     shadowOpacity: 0.5,
@@ -73,51 +78,85 @@ export const RankingScreen = (props) => {
                     marginLeft: 10,
                     backgroundColor: '#536382'
                 }}>
-                    <View style = {{flex: 1, marginTop: 20, marginBottom: 10, padding: 10}}>
+                    <View style={{flex: 1, marginTop: 20, marginBottom: 10, padding: 10}}>
                         {header('Tank')}
-                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center', padding: 10}}>
-                            {tankPath !== null && <Image source= {tankPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
+                        <View style={{
+                            flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
+                        }}>
+                            {tankPath !== null &&
+                            <Image source={tankPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style={{
+                                marginLeft: 20,
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontStyle: 'italic',
+                                fontSize: 40
+                            }}>1000</Text>
                         </View>
                         {header('DPS')}
-                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center' , padding: 10}}>
-                            {dpsPath !== null && <Image source= {dpsPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
+                        <View style={{
+                            flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
+                        }}>
+                            {dpsPath !== null &&
+                            <Image source={dpsPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style={{
+                                marginLeft: 20,
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontStyle: 'italic',
+                                fontSize: 40
+                            }}>1000</Text>
                         </View>
                         {header('Support')}
-                        <View style = {{flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center', padding: 10}}>
-                            {supportPath !== null && <Image source= {supportPath} style = {{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style = {{ marginLeft: 20, color: 'white', fontWeight: 'bold', fontStyle: 'italic', fontSize: 40}}>1000</Text>
+                        <View style={{
+                            flex: 1, flexDirection: 'row', shadowColor: 'black',
+                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
+                        }}>
+                            {supportPath !== null &&
+                            <Image source={supportPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
+                            <Text style={{
+                                marginLeft: 20,
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontStyle: 'italic',
+                                fontSize: 40
+                            }}>1000</Text>
                             <Text>^50</Text>
                         </View>
                     </View>
                 </View>
-                <View>
+                    <View>
                     <Text>Your suggested score based on your skills like damage done, healing and damage blocked over time</Text>
                     <Text>See how you can improve!</Text>
 
                     <TouchableOpacity
-                        style={{marginTop: 18,
-                            backgroundColor:'#C66C3B',
-                            borderRadius:30,
-                            paddingLeft: 44,
-                            paddingRight: 44,
-                            paddingTop: 12,
-                            paddingBottom: 12,
-                            borderColor: '#C66C3B',
+                    style={{marginTop: 18,
+                    backgroundColor:'#C66C3B',
+                    borderRadius:30,
+                    paddingLeft: 44,
+                    paddingRight: 44,
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderColor: '#C66C3B',
 
-                        }}
-                        activeOpacity = { .5 }
-                        onPress={console.log('next')}
+                }}
+                    activeOpacity = {.5}
+                    onPress={console.log('next')}
                     >
 
-                        <Text category= 'h6'> <MaterialCommunityIcons name="page-next-outline" size={24} color="black" /> </Text>
+                    <Text category= 'h6'> <MaterialCommunityIcons name="page-next-outline" size={24} color="black" /> </Text>
 
                     </TouchableOpacity>
-                </View>
-        </SafeAreaView>
+                    </View>
+                    </>
+                }
+            </SafeAreaView>
+        )
+    }
+
+    return (
+        Ranking()
     )
 }

@@ -26,7 +26,7 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
         console.log(response)
         if (response?.type === 'success') {
             const { id_token } = response.params;
-            fetch('http://192.168.86.58:3000/login/',
+            fetch('http://192.168.86.66:3000/login/',
                 {method: 'POST',
                         body: JSON.stringify({id_token}),
                         headers: {'Content-Type': 'application/json'}})
@@ -35,7 +35,11 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                     if(logged.hasOwnProperty('userId')) {
                         console.log('done')
                         dispatch({userId: logged.userId})
-                        navigation.navigate(logged.screenName)
+                        if(logged.screenName !== 'SetBattleTagScreen') {
+                            dispatch({isSignedIn: true})
+                        }
+                        else {navigation.navigate(logged.screenName)}
+
                     }
                 })
 
