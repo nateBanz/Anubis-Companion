@@ -6,7 +6,7 @@ import {TouchableOpacity} from "react-native-gesture-handler";
 export const TopHeaderBar = (props)=> {
     return (
         <View style = {{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', padding: 15}}>
-            <Text style ={{flex: 5, fontWeight: 'bold', letterSpacing: 1, fontSize: 24, color: '#ffffff'
+            <Text style ={{flex: 5, fontWeight: 'bold', letterSpacing: 1, fontSize: 28, color: '#ffffff'
                 }}>
                 {props.title}
             </Text>

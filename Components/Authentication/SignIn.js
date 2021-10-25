@@ -37,6 +37,7 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                         dispatch({userId: logged.userId})
                         if(logged.screenName !== 'SetBattleTagScreen') {
                             dispatch({isSignedIn: true})
+                            dispatch({isLoading: true})
                         }
                         else {navigation.navigate(logged.screenName)}
 
@@ -73,7 +74,7 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                     width: 325,
                     height: 420}}>
                     <Formik
-                        initialValues={{ name: '' , password: ''}}
+                        initialValues={{ email: '' , password: ''}}
                         onSubmit={()=>console.log('Logging In')}
                     >
                         {({ handleChange, handleBlur, handleSubmit, values })=>(
@@ -83,13 +84,13 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                         borderColor: 'white'}}>
                             <Ionicons name="person-outline" size={24} color="white" style={{flex: 1}}/>
                             <TextInput
-                                onChangeText={handleChange('name')}
-                                onBlur={handleBlur('name')}
-                                value={values.name}
+                                onChangeText={handleChange('email')}
+                                onBlur={handleBlur('email')}
+                                value={values.email}
                                 textAlign={'center'}
                                 style= {{flex: 4, fontSize: 18, color: '#ffffff',
                                 }}
-                                placeholder="Username"
+                                placeholder="Email"
                                 placeholderTextColor = '#ffffff'
 
                             />
@@ -137,12 +138,12 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
                     </View>
                         )}
                     </Formik>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                    <View style={{flexDirection: 'row', alignItems: 'center', width: 150}}>
+                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
                         <View>
-                            <Text style={{width: 50, textAlign: 'center', fontSize: 18}}>or</Text>
+                            <Text style={{width: 50, textAlign: 'center', fontSize: 18, color: 'white'}}>or</Text>
                         </View>
-                        <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
                     </View>
                     <View style ={{borderRadius: 20}}>
                         <GoogleSocialButton

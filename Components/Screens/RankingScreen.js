@@ -1,25 +1,79 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Text, View} from "react-native";
+import {StyleSheet, Text, View, ScrollView} from "react-native";
 import {SafeAreaView} from "react-native";
 import {Layout} from "@ui-kitten/components";
 import {TopHeaderBar} from "../Assets/TopHeaderBar";
 import {Image} from "react-native";
 import {TouchableOpacity} from "react-native-gesture-handler";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {AntDesign, Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
 import {AnubisContext} from "../State/Context";
 import {LoadingScreen} from "./LoadingScreen";
+import {isEmptyArray} from "formik";
 
 export const RankingScreen = (props) => {
-    const [number, setNumber] = useState([0,2000,4000])
-    const { state: { isLoading }, dispatch } = useContext(AnubisContext)
+
+    const [tank, setTank] = useState(null)
+    const [dps, setDps] = useState(null)
+    const [support, setSupport] = useState(null)
+    const [differences, setDifferences] = useState([])
+    const { state: { isLoading, rankings, suggestedRanking}, dispatch } = useContext(AnubisContext)
+
+    const creatediff = (diff) => {
+
+        if(diff<0) {
+            diff = Math.abs(Math.round(diff))
+          return (
+              <>
+              <Text
+                  style={{
+                      marginLeft: 20,
+                      color: '#F5F5F5',
+                      fontWeight: 'bold',
+                      fontStyle: 'italic',
+                      fontSize: 15,
+                      paddingBottom: 10
+                  }}>
+                  <AntDesign name="caretdown" size={15} color="red" />
+                  {diff}</Text>
+              </>
+          )
+        }
+        else {
+            diff = Math.abs(Math.round(diff))
+            return (
+                <>
+                    <Text
+                        style={{
+                            marginLeft: 20,
+                            color: '#F5F5F5',
+                            fontWeight: 'bold',
+                            fontStyle: 'italic',
+                            fontSize: 15
+                        }}>
+                        <AntDesign name="caretup" size={15} color="green" />
+                        {diff}
+                    </Text>
+                </>
+            )
+        }
+    }
+
     const header = (title) => {
         return (
-        <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
-            <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
-            <View>
-                <Text style={{ textAlign: 'center', color: 'white', fontSize: 18}}>{title}</Text>
-            </View>
-            <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
+        <View style = {{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'baseline',
+            paddingBottom: 5,
+            marginTop: -25,
+            marginBottom: 14,
+            paddingHorizontal: 8,
+            backgroundColor: '#505979',
+            borderRadius: 20}}>
+            <Text style ={{fontWeight: 'bold', letterSpacing: 1, fontSize: 18, color: '#ffffff'
+                }}>
+                {title}
+            </Text>
         </View>
         )
     }
@@ -47,13 +101,23 @@ export const RankingScreen = (props) => {
             return require('../Assets/grandmaster.png')
         }
     }
-    useEffect(()=>{
+    useEffect(()=> {
+        if (suggestedRanking && !isEmptyArray(suggestedRanking)) {
+            console.log(typeof suggestedRanking)
+            let rank = suggestedRanking[0]
+            let newArray = differences
+            for (let x = 0; x < 3; x++) {
+                let diff = rank[x] - rankings[0][x]
+                newArray.push(diff)
+            }
+            setDifferences(newArray)
+            setTank(determinePath(rank[0]))
+            setDps(determinePath(rank[1]))
+            setSupport(determinePath(rank[2]))
+     }
+    }, [suggestedRanking])
 
-    }, [])
 
-    let tankPath = determinePath(number[0])
-    let dpsPath = determinePath(number[1])
-    let supportPath = determinePath(number[2])
 
     const Ranking = () => {
         return (
@@ -64,89 +128,71 @@ export const RankingScreen = (props) => {
 
                 { isLoading ? <LoadingScreen loading = {true}/> :
                     <>
-                    <View style={{
-                    elevation: 4,
-                    shadowColor: 'black',
-                    shadowOpacity: 0.5,
-                    shadowOffsetY: 0,
-                    shadowOffsetX: 5,
-                    width: '95%',
-                    height: 400,
-                    borderRadius: 20,
-                    alignItems: 'flex-start',
+                    <ScrollView
+                    horizontal
+                    bounces
+                    style = {{backgroundColor: '#505979', marginLeft: -21, marginTop: 15}}
+                        contentContainerStyle={{
+                    width: '100%',
+                    height: 300,
+                    alignItems: 'center',
                     padding: 10,
-                    marginLeft: 10,
-                    backgroundColor: '#536382'
+                    backgroundColor: '#505979',
+
                 }}>
-                    <View style={{flex: 1, marginTop: 20, marginBottom: 10, padding: 10}}>
-                        {header('Tank')}
-                        <View style={{
-                            flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
-                        }}>
-                            {tankPath !== null &&
-                            <Image source={tankPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style={{
-                                marginLeft: 20,
-                                color: 'white',
-                                fontWeight: 'bold',
-                                fontStyle: 'italic',
-                                fontSize: 40
-                            }}>1000</Text>
+                    <View style = {{flex: 1, marginTop: 10, marginBottom: 10, padding: 8, flexDirection: 'row'}}>
+
+
+                        <View style={styles.col}>
+                            {header('Tank')}
+                            {tank !== null &&
+                            <Image source={tank} style={{height: 90, width: 90}} resizeMod='contain'/>}
+                            <Text style = {styles.text}>{!isEmptyArray(suggestedRanking) && Math.round(suggestedRanking[0][0])}</Text>
+                            {creatediff(differences[0])}
                         </View>
-                        {header('DPS')}
-                        <View style={{
-                            flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
-                        }}>
-                            {dpsPath !== null &&
-                            <Image source={dpsPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style={{
-                                marginLeft: 20,
-                                color: 'white',
-                                fontWeight: 'bold',
-                                fontStyle: 'italic',
-                                fontSize: 40
-                            }}>1000</Text>
+
+
+                        <View style={styles.col}>
+                            {header('Damage')}
+                            {dps !== null &&
+                            <Image source={dps} style={{height: 90, width: 90}} resizeMod='contain'/>}
+                            <Text style = {styles.text}>{!isEmptyArray(suggestedRanking) && Math.round(suggestedRanking[0][1])}</Text>
+                            {creatediff(differences[1])}
                         </View>
-                        {header('Support')}
-                        <View style={{
-                            flex: 1, flexDirection: 'row', shadowColor: 'black',
-                            shadowOpacity: 0.3, alignItems: 'center', padding: 10
-                        }}>
-                            {supportPath !== null &&
-                            <Image source={supportPath} style={{height: 80, width: 100}} resizeMod='contain'/>}
-                            <Text style={{
-                                marginLeft: 20,
-                                color: 'white',
-                                fontWeight: 'bold',
-                                fontStyle: 'italic',
-                                fontSize: 40
-                            }}>1000</Text>
-                            <Text>^50</Text>
+
+                        <View style={styles.col}>
+                            {header('Support')}
+                            {support !== null &&
+                            <Image source={support} style={{height: 90, width: 90}} resizeMod='contain'/>}
+                            <Text style = {styles.text} >{!isEmptyArray(suggestedRanking) && Math.round(suggestedRanking[0][2])}</Text>
+                            {creatediff(differences[2])}
                         </View>
                     </View>
-                </View>
-                    <View>
-                    <Text>Your suggested score based on your skills like damage done, healing and damage blocked over time</Text>
-                    <Text>See how you can improve!</Text>
+                </ScrollView>
+                    <View style={styles.bottom}>
+                        <Text style = {{fontSize: 24, color: 'white', marginBottom: 15, fontWeight: 'bold'}}>Breakdown</Text>
+                        <Text style = {{fontSize: 16, color: 'white'}}>Your suggested 'ranking' is based purely on your mechanical skills like Average Damage, Healing and Damage Blocked over a set period</Text>
+                        <Text style = {{fontSize: 16, color: 'white', marginTop: 10}}>See how you can improve on the next page!</Text>
 
                     <TouchableOpacity
-                    style={{marginTop: 18,
+                    style={{
+                    marginTop: 18,
+                    marginBottom: -30,
                     backgroundColor:'#C66C3B',
                     borderRadius:30,
-                    paddingLeft: 44,
-                    paddingRight: 44,
-                    paddingTop: 12,
-                    paddingBottom: 12,
                     borderColor: '#C66C3B',
+                    width: 100,
+                    height: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center'
 
                 }}
                     activeOpacity = {.5}
                     onPress={console.log('next')}
                     >
 
-                    <Text category= 'h6'> <MaterialCommunityIcons name="page-next-outline" size={24} color="black" /> </Text>
+                    <Text> <Entypo name="arrow-long-right" size={24} color="white" /> </Text>
 
                     </TouchableOpacity>
                     </View>
@@ -155,6 +201,31 @@ export const RankingScreen = (props) => {
             </SafeAreaView>
         )
     }
+
+    const styles = StyleSheet.create({
+        text: {
+            fontStyle: 'italic',
+            fontSize: 28,
+            fontWeight: 'bold',
+            color: 'white',
+            marginLeft: 10
+        },
+        bottom: {
+            backgroundColor: '#505979',
+            borderRadius: 20,
+            justifyContent: 'flex-start',
+            marginTop: 40,
+            padding: 15,
+            marginHorizontal: 10
+        },
+        col: {
+            padding: 15,
+            backgroundColor: '#222b45',
+            marginHorizontal: 5,
+            height: 210,
+            borderRadius: 20
+        }
+    });
 
     return (
         Ranking()
