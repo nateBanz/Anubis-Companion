@@ -23,23 +23,6 @@ export default function App() {
 
              </ApplicationProvider>
         </>
-      // <View style = {styles.container}>
-      //     <ImageBackground source = {require('./Components/Assets/backgroundOverwatch.png')} resizeMode = 'cover' style = {styles.backgroundImage}>
-      //
-      //         {/*<NavigationContainer>*/}
-      //         {/*    <Stack.Navigator>*/}
-      //         {/*        {!isSignedIn ? <Stack.Screen name="Login" component={Login}/> :*/}
-      //         {/*            <>*/}
-      //         {/*                <Stack.Screen name="Summary" component={SummaryScreen}/>*/}
-      //         {/*                <Stack.Screen name="Ranking" component={RankingScreen}/>*/}
-      //         {/*                <Stack.Screen name="Detail" component={DetailScreen}/>*/}
-      //         {/*                <Stack.Screen name="Profile" component={ProfileScreen}/>*/}
-      //         {/*            </>*/}
-      //         {/*        }*/}
-      //         {/*    </Stack.Navigator>*/}
-      //         {/*</NavigationContainer>*/}
-      //     </ImageBackground>
-      // </View>
 
   );
 }

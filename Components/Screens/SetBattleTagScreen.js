@@ -45,7 +45,7 @@ export const SetBattleTagScreen = () => {
                         dispatch({isLoading: true});
                         let fullTag = values.name + '-' + values.number;
                         console.log(fullTag);
-                        fetch('http://192.168.86.66:3000/login/python/',
+                        fetch('https://anubis-companion.herokuapp.com/login/python/',
                             {method: 'POST',
                                 body: JSON.stringify({fullTag, userId}),
                                 headers: {'Content-Type': 'application/json'}})

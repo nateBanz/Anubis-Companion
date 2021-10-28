@@ -9,7 +9,7 @@ export const LoadingScreen = (props) => {
         console.log(newLoading)
         console.log(battleTag)
         if(newLoading) {
-            fetch('http://192.168.86.66:3000/login/loggedPython/',
+            fetch('https://anubis-companion.herokuapp.com/login/loggedPython/',
                 {method: 'POST',
                     body: battleTag ? JSON.stringify({battleTag, userId}) : JSON.stringify({userId}) ,
                     headers: {'Content-Type': 'application/json'}})

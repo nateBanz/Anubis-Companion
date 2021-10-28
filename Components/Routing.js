@@ -44,11 +44,15 @@ export const Routing = () => {
                         </Stack.Navigator>
                     :
                     <Tab.Navigator
+                        tabBarOptions = {{
+                            activeBackgroundColor: '#C66C3B',
+                            activeTintColor: '#ffffff'
+                        }}
                         appearance={{
                             shadow: true,
-                            floating: true,
                             whenActiveShow: 'both',
                             whenInactiveShow: 'icon-only',
+                            tabBarBackground:  '#222b45',
 
                         }}
                         screenOptions = {{
@@ -60,18 +64,18 @@ export const Routing = () => {
                         <Tab.Screen name="Skill Rating" component={RankingScreen} options={{
                                 title: 'Suggested Ranking',
                                 tabBarIcon: ({ focused, color, size }) => (
-                                <Ionicons name="home-outline" size={18} color="#ffffff" />
+                                <Ionicons name="home-outline" size={18} color="white" />
                             )
                         }}/>
                         <Tab.Screen name="Suggestions" component={DetailScreen} options={{
                                 title: 'Stats Summary',
                                 tabBarIcon: ({ focused, color, size }) => (
-                                <Ionicons name="analytics" size={18} color="#ffffff" />
+                                <Ionicons name="analytics" size={18} color="white" />
                             )
                         }}/>
                         <Tab.Screen name="Profile" component={ProfileScreen} options={{
                                 tabBarIcon: ({ focused, color, size }) => (
-                                <Ionicons name="settings-outline" size={18} color="#ffffff" />
+                                <Ionicons name="settings-outline" size={18} color="white" />
                             )
                         }}/>
                     </Tab.Navigator>

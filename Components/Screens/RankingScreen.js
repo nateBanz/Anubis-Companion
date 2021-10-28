@@ -10,14 +10,17 @@ import {AnubisContext} from "../State/Context";
 import {LoadingScreen} from "./LoadingScreen";
 import {isEmptyArray} from "formik";
 
-export const RankingScreen = (props) => {
+export const RankingScreen = ({navigation}) => {
 
     const [tank, setTank] = useState(null)
     const [dps, setDps] = useState(null)
     const [support, setSupport] = useState(null)
     const [differences, setDifferences] = useState([])
     const { state: { isLoading, rankings, suggestedRanking}, dispatch } = useContext(AnubisContext)
-
+    const move = () => {
+        console.log('hello')
+        navigation.navigate('Suggestions')
+    }
     const creatediff = (diff) => {
 
         if(diff<0) {
@@ -131,7 +134,7 @@ export const RankingScreen = (props) => {
                     <ScrollView
                     horizontal
                     bounces
-                    style = {{backgroundColor: '#505979', marginLeft: -21, marginTop: 15}}
+                    style = {{backgroundColor: '#505979', marginLeft: 0, marginTop: 15}}
                         contentContainerStyle={{
                     width: '100%',
                     height: 300,
@@ -189,7 +192,7 @@ export const RankingScreen = (props) => {
 
                 }}
                     activeOpacity = {.5}
-                    onPress={console.log('next')}
+                    onPress={move}
                     >
 
                     <Text> <Entypo name="arrow-long-right" size={24} color="white" /> </Text>

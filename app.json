@@ -2,10 +2,19 @@
   "expo": {
     "name": "Anubis-Companion",
     "slug": "Anubis-Companion",
+    "icon": "./Components/Assets/playstore.png",
     "version": "1.0.0",
+    "scheme": "anubisoverwatch",
+    "ios": {
+      "bundleIdentifier": "com.natbanz.anubis",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.natbanz.anubis",
+      "versionCode": 1
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
-  },
-  "name": "Anubis-Companion"
+  }
 }

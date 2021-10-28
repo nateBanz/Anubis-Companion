@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
 import React, {useEffect, useState} from 'react'
-import { AntDesign } from '@expo/vector-icons';
+import {AntDesign, Entypo, FontAwesome} from '@expo/vector-icons';
 import {Image} from "react-native";
 import { Video, AVPlaybackStatus } from 'expo-av';
 import {LayoutAnimation, UIManager} from "react-native-web";
@@ -19,7 +19,9 @@ export const ExpandedCard = (props)=> {
     useEffect(()=>{
         console.log(title)
         if(!title) {
-            setTitle(props.item[0])
+            let tite = props.item[0]
+            let cutTitle = tite.replace('AvgPer10Min','');
+            setTitle(cutTitle)
         }
         else{
             getText(props.item[0])
@@ -27,13 +29,13 @@ export const ExpandedCard = (props)=> {
 
     }, [title])
     const changeView = () => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
         setExpand(!expand)
     }
-    const getText = () => {
-        fetch('http://192.168.86.66:3000/login/getTextOnCard',
+    const getText = (item) => {
+        fetch('https://anubis-companion.herokuapp.com/login/getTextOnCard',
             {method: 'POST',
-                body: JSON.stringify({title}),
+                body: JSON.stringify({title: item}),
                 headers: {'Content-Type': 'application/json'}})
             .then((response)=> (response.text()))
             .then((text) => {setText(text)}
@@ -44,37 +46,37 @@ export const ExpandedCard = (props)=> {
 
     const getInfoOnCard = (titleLower)=> {
         console.log(titleLower)
-        if (titleLower.includes('allDamageDoneAvgPer10Min')) {
+        if (titleLower.includes('allDamageDone')) {
             return require('./Assets/Gifs/allDamage.mp4' )
         }
-        else if (titleLower.includes('deathsAvgPer10Min')) {
+        else if (titleLower.includes('deaths')) {
             return require('./Assets/Gifs/deaths.mp4')
         }
-        else if (titleLower.includes('healingDoneAvgPer10Min')) {
+        else if (titleLower.includes('healingDone')) {
             return require('./Assets/Gifs/healing.mp4')
         }
-        else if (titleLower.includes('heroDamageDoneAvgPer10Min')) {
+        else if (titleLower.includes('heroDamageDone')) {
             return require('./Assets/Gifs/heroDamage.mp4')
         }
-        else if (titleLower.includes('objectiveKillsAvgPer10Min')) {
+        else if (titleLower.includes('objectiveKills')) {
             return require('./Assets/Gifs/objectiveKills.mp4')
         }
-        else if (titleLower.includes('soloKillsAvgPer10Min')) {
+        else if (titleLower.includes('soloKills')) {
             return require('./Assets/Gifs/solo.mp4')
         }
-        else if (titleLower.includes('timeSpentOnFireAvgPer10Min')) {
+        else if (titleLower.includes('timeSpentOnFire')) {
             return require('./Assets/Gifs/onFire.mp4')
         }
-        else if (titleLower.includes('barrierDamageDoneAvgPer10Min')) {
+        else if (titleLower.includes('barrierDamageDone')) {
             return require('./Assets/Gifs/barrier.mp4')
         }
-        else if (titleLower.includes('objectiveTimeAvgPer10Min')) {
+        else if (titleLower.includes('objectiveTime')) {
             return require('./Assets/Gifs/objective.mp4')
         }
-        else if (titleLower.includes('finalBlowsAvgPer10Min')) {
+        else if (titleLower.includes('finalBlows')) {
             return require('./Assets/Gifs/finalBlows.mp4')
         }
-        else if (titleLower.includes('eliminationsAvgPer10Min')) {
+        else if (titleLower.includes('eliminations')) {
             return require('./Assets/Gifs/elims.mp4')
         }
 
@@ -87,7 +89,7 @@ export const ExpandedCard = (props)=> {
             backgroundColor: '#ecf0f1',
         },
         video: {
-            width: 250,
+            width: 295,
             height: 200,
             borderRadius: 20,
         },
@@ -97,49 +99,85 @@ export const ExpandedCard = (props)=> {
             alignItems: 'center',
         },
         normalView: {
-            width: 250,
+            width: 295,
             height: 200,
             padding: 10,
-            margin: 4
+            margin: 4,
         },
         expandedView: {
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0
+            height: 500,
+            width: 300,
+            padding: 10,
+            margin: 4,
         },
-
         expandedText: {
             marginTop: 10,
             color: 'white',
             fontSize: 18
+        },
+        activeButton: {
+            backgroundColor:'#C66C3B',
+            borderRadius:30,
+            borderColor: '#C66C3B',
+            width: 100,
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            marginLeft: 15,
+            marginTop: -50
+
+        },
+        hiddenButton : {
+            backgroundColor:'#C66C3B25',
+            borderRadius:30,
+            borderColor: '#C66C3B',
+            width: 100,
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            marginLeft: 15,
+            marginTop: -50
+
         }
     });
 
     return (
-        <TouchableOpacity onPress={changeView} style = {expand ? styles.expandedView : styles.normalView}>
+        <View style = {expand ? styles.expandedView : styles.normalView}>
 
             {title!== undefined &&
             <Video
-                resizeMode= 'contain'
+                resizeMode= 'stretch'
                 ref = {video}
                 isLooping
                 source={getInfoOnCard(title)}
                 style = {styles.video}
-                useNativeControls
                 shouldPlay
+                isMuted
             >
             </Video>}
-
+            <View style ={{position: 'absolute', top: 20, left: 25}}>
+                <Text style = {{color: 'white', fontSize: 22, fontWeight: 'bold', letterSpacing: 1}}>
+                    {title && title}
+                </Text>
+            </View>
             {expand &&
-            <View>
+            <View style = {{flex: 1,  backgroundColor: '#222b45',borderRadius: 20, padding: 15, marginTop: 20}}>
                 <Text style = {styles.expandedText}>
                     {text}
                 </Text>
             </View>}
-
-
+            <TouchableOpacity
+            style={!expand ? [styles.activeButton] : [styles.activeButton, styles.hiddenButton] }
+            activeOpacity = {.5}
+            opacity = {expand ? .1 : .7}
+            onPress={changeView}
+        >
+            <Text> <FontAwesome name="expand" size={24} color="white" /></Text>
         </TouchableOpacity>
+
+
+        </View>
     )
 }
