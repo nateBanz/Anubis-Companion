@@ -2,7 +2,9 @@ import React, {useContext, useState} from 'react';
 import {View, Button} from "react-native";
 import OverLogo from "../Assets/OverLogo";
 import {GoogleLoginButton} from "react-social-login-buttons";
-import {SafeAreaView} from "react-native";
+import {
+    SafeAreaView,
+} from 'react-native-safe-area-context';
 import { Layout, Text} from "@ui-kitten/components";
 import { Formik } from 'formik';
 import {TextInput, TouchableOpacity} from "react-native-gesture-handler";

@@ -2,7 +2,10 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Text} from "react-native";
 import {View} from "react-native";
 import {TopHeaderBar} from "../Assets/TopHeaderBar";
-import {SafeAreaView, StyleSheet, ScrollView} from "react-native";
+import {StyleSheet, ScrollView} from "react-native";
+import {
+    SafeAreaView,
+} from 'react-native-safe-area-context';
 import {FlatList} from "react-native-gesture-handler";
 import {AnubisContext} from "../State/Context";
 import {ExpandedCard} from "../ExpandedCard";
@@ -43,7 +46,7 @@ export const DetailScreen = (props) => {
 
             <ScrollView contentContainerStyle={detailScreen.mainContainer}>
 
-                <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 15, marginLeft: 10}}>Top
+                <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 15, marginLeft: 10}}>Best
                     Statistics</Text>
                 <View style={detailScreen.videoContainer}>
                     <FlatList
@@ -61,7 +64,7 @@ export const DetailScreen = (props) => {
                     marginBottom: 15,
                     marginTop: 25,
                     marginLeft: 10
-                }}>Bottom Statistics</Text>
+                }}>Worst Statistics</Text>
                 <View style={detailScreen.videoContainer}>
                     <FlatList
                         data={bottomThreeStats}

@@ -1,23 +1,42 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Text} from "react-native";
-import {Layout} from "@ui-kitten/components";
+import {Button, Layout} from "@ui-kitten/components";
 import {TextInput, TouchableOpacity} from "react-native-gesture-handler";
 import {LoadingScreen} from "./LoadingScreen";
 import {Formik} from "formik";
 import {View} from "react-native";
 import {TopHeaderBar} from "../Assets/TopHeaderBar";
-import {SafeAreaView, StyleSheet, ScrollView} from "react-native";
+import { StyleSheet, ScrollView} from "react-native";
+import {
+    SafeAreaView,
+} from 'react-native-safe-area-context';
 import {AnubisContext} from "../State/Context";
+import {FeedbackFish} from "@feedback-fish/react";
+import Animated from "react-native-reanimated";
+
 
 export const ProfileScreen = (props) => {
+    const { state: { userId, isLoading, battleTag, error }, dispatch } = useContext(AnubisContext)
+    const [val, setVal] = useState(null)
+    const errRef = useRef(null);
+    // function setter(values) {
+    //         dispatch({isLoading: true});
+    //         let fullTag = values.name + '-' + values.number;
+    //         // for some weird reason, this is broken as well. Will look into further after testing
+    //         // setVal(fullTag)
+    // }
+
 
     function getSecondPart(str) {
         return str.split('-')[1];
     }
 
-    const { state: { userId, isLoading, battleTag }, dispatch } = useContext(AnubisContext)
-    const [error, setError] = useState(false)
-    const [errorMessage, setErrorMessage] = useState(null)
+    function setter(values) {
+        let full = values.name + '-' + values.number
+        console.log(full)
+        setVal(full)
+    }
+
 
     //if error, return error on this screen
     let Error = (message) => {
@@ -32,10 +51,10 @@ export const ProfileScreen = (props) => {
 
     const profileScreen = StyleSheet.create({
             mainContainer: {
-                justifyContent: 'flex-start',
                 marginTop: 25,
                 marginHorizontal: 0,
                 padding: 15,
+                height: '90%'
             },
 
         })
@@ -43,14 +62,50 @@ export const ProfileScreen = (props) => {
         //make the card retrieve the image and the text based on the title
 
         useEffect(()=>{
-        }, [])
+            console.log(val)
+            if(val) {
+                dispatch({isLoading: true})
+                let fullTag = val
+                fetch('https://anubis-companion.herokuapp.com/login/python/',
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({fullTag, userId}),
+                        headers: {'Content-Type': 'application/json'}
+                    })
+                    .then((res) => res.json())
+                    .catch(err => console.log('error'))
+                    .then(
+                        (final) => {
+                            if (final && final.hasOwnProperty('error')) {
+                                console.log(final.error)
+                                errRef.current = final.error
+                                console.log('set')
+
+                            } else {
+                                dispatch({error: null})
+                                dispatch({isSignedIn: true})
+                                dispatch({battleTag: fullTag});
+                                dispatch({rankings: JSON.parse(final[0])});
+                                dispatch({suggestedRanking: JSON.parse(final[1])});
+                                dispatch({topThreeStats: JSON.parse(final[2])});
+                                dispatch({bottomThreeStats: JSON.parse(final[3])})
+                            }
+                            dispatch({isLoading: false})
+
+                        })
+            }
+
+        }, [val])
+
+    //this is broken for now
         return (
-            <SafeAreaView style = {{flex: 1}}>
+            <SafeAreaView style = {{flexGrow: 1}}>
                 <View style = {{ alignItems: 'center', justifyContent: 'center'}}>
                     <TopHeaderBar title = 'Profile'></TopHeaderBar>
                 </View>
 
-                <ScrollView contentContainerStyle = {profileScreen.mainContainer}>
+                <ScrollView contentContainerStyle = {profileScreen.mainContainer} overScrollMode = 'always'>
+                    <View>
                     <Text style = {{
                         fontSize: 20,
                         fontWeight: 'bold',
@@ -58,42 +113,16 @@ export const ProfileScreen = (props) => {
                         marginLeft: 10}}>
                         Change/Modify BattleTag
                     </Text>
-                    <View style = {{borderColor: 'white',
+                    <View style = {{
+                    borderColor: 'white',
                     borderWidth: 1,
                     padding: 5,
                     borderRadius: 20,
-                    marginTop: 20}}>
+                    marginTop: 15,
+                    height: '40%' }}>
                     <Formik
                         initialValues={{ name: '' , number: ''}}
-                        onSubmit={values => {
-                            dispatch({isLoading: true});
-                            let fullTag = values.name + '-' + values.number;
-                            console.log(fullTag);
-                            fetch('https://anubis-companion.herokuapp.com/login/python/',
-                                {method: 'POST',
-                                    body: JSON.stringify({fullTag, userId}),
-                                    headers: {'Content-Type': 'application/json'}})
-                                .then((res) => res.json())
-                                .catch(err => console.log(err))
-                                .then(
-                                    (final) => {
-                                        if(final.hasOwnProperty('error')) {
-                                            setError(true)
-                                            setErrorMessage(final.error)
-                                        }
-                                        else {
-                                            setError(false)
-                                            dispatch({isSignedIn: true})
-                                            dispatch({battleTag: fullTag });
-                                            dispatch ({rankings: JSON.parse(final[0])});
-                                            dispatch({suggestedRanking: JSON.parse(final[1]) });
-                                            dispatch({topThreeStats: JSON.parse(final[2]) });
-                                            dispatch({bottomThreeStats: JSON.parse(final[3]) })}
-                                        dispatch({isLoading: false})
-
-                                    })
-                        }}
-                    >
+                        onSubmit={(values => setter(values))}>
                         {({ handleChange, handleBlur, handleSubmit, values }) => (
                             <>
                                 <Layout style = {{
@@ -107,7 +136,7 @@ export const ProfileScreen = (props) => {
                                     width: '90%',
                                     borderRadius: 30,
                                     alignItems: 'center',
-                                    marginTop: 35,
+                                    marginTop: 15,
                                     alignSelf: 'center',
                                     backgroundColor: '#505979'
                                 }}
@@ -163,7 +192,7 @@ export const ProfileScreen = (props) => {
                                             alignSelf: 'center'
                                         }}
                                         activeOpacity = { .5 }
-                                        onPress={ handleSubmit }
+                                        onPress={ handleSubmit}
                                     >
 
                                         <Text style = {{
@@ -173,9 +202,12 @@ export const ProfileScreen = (props) => {
                                             }}> Apply </Text>
 
                                     </TouchableOpacity>
-
                                     {isLoading && <LoadingScreen/>}
-                                    {error && Error(errorMessage) }
+                                    {errRef.current &&
+                                    <View style = {{alignSelf: 'center', padding: 1}}>
+                                        <Text style = {{color: 'red', fontWeight: 'bold'}}>
+                                        {errRef.current + ' Try Again!'}
+                                    </Text></View> }
                                 </Layout>
 
 
@@ -183,6 +215,89 @@ export const ProfileScreen = (props) => {
 
                         )}
                     </Formik>
+                        {/*{err && <Error message = {err}/>}*/}
+                    </View>
+
+                    <Text style = {{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: 'white',
+                    alignSelf: 'center',
+                    marginTop: 20}}>
+                        Feedback!
+                    </Text>
+                    <View style = {{
+                        padding: 5,
+                        borderRadius: 20,
+                        height: '30%'}}>
+                        <Formik
+                            initialValues={{ text: ''}}
+                            onSubmit={()=> {console.log('submitted')}}>
+                            {({ handleChange, handleBlur, handleSubmit, values }) => (
+                                <>
+                                    <Layout style = {{
+                                        borderRadius: 30,
+                                        alignItems: 'center',
+                                        alignSelf: 'center',
+                                    }}
+                                    >
+                                        <TextInput
+                                            multiline
+                                            numberOfLines={4}
+                                            onChangeText={handleChange('text')}
+                                            onBlur={handleBlur('text')}
+                                            value={values.text}
+                                            textAlign={'center'}
+                                            style= {{flex: 1, fontSize: 15, color: '#ffffff', backgroundColor: '#505979', padding: 15, borderRadius: 30
+                                            }}
+                                            placeholder="Let me know if you have any issues or ideas!"
+                                            placeholderTextColor = '#ffffff'
+
+                                        />
+
+                                        <TouchableOpacity
+                                            style={{marginTop: 0,
+                                                backgroundColor:'#C66C3B',
+                                                borderRadius:30,
+                                                alignItems: 'center',
+                                                borderColor: '#C66C3B',
+                                                paddingVertical: 10,
+                                                width: 100,
+                                                alignSelf: 'center',
+                                            }}
+                                            activeOpacity = { .5 }
+                                            onPress={ () => fetch('https://api.feedback.fish/feedback', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    projectId: "8b74890d826155",
+                                                    text: values.text,
+                                                    category: "other", // Either "issue", "idea" or "other",
+                                                    userId: userId,
+                                                    metadata: {},
+                                                })
+                                            })
+                                            }
+                                        >
+
+                                            <Text style = {{
+                                                fontSize: 14,
+                                                fontWeight: 'bold',
+                                                color: 'white',
+                                            }}> Submit </Text>
+
+                                        </TouchableOpacity>
+
+                                    </Layout>
+
+
+                                </>
+
+                            )}
+                        </Formik>
+                    </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>

@@ -1,27 +1,25 @@
 import Firebase, {auth} from "./firebase";
 
 async function addUserToFirebase(result) {
-    let signIn = {signIn: false, result: result.user.uid}
+    let user = result
+    let response = await fetch('https://anubis-companion.herokuapp.com/login/addToFirebase/',
+        {method: 'POST',
+            body: JSON.stringify({user}),
+            headers: {'Content-Type': 'application/json'}})
+    response = await response.json()
+    console.log(response)
+    return response
 
-    if(result.additionalUserInfo.isNewUser) {
-        signIn.signIn = true
-        await Firebase.database().ref('/users/' + result.user.uid).update(
-            {email: result.user.email}
-        )
-    }
-    return signIn
 }
 
-export let login = async (googleUser, username = undefined, password = undefined) => {
+export let login = async (googleUser, username = undefined, password = undefined, register = undefined) => {
 
     let info = {};
-    console.log(googleUser)
     if(googleUser) {
         let credential = auth.GoogleAuthProvider.credential(
             googleUser);
         try {// Sign in with credential from the Google user.
             let res = await Firebase.auth().signInWithCredential(credential)
-            console.log(res)
             let final = await addUserToFirebase(res)
             if (final) {
                 info = final
@@ -31,10 +29,26 @@ export let login = async (googleUser, username = undefined, password = undefined
             info = {error: error}
         }
     }
-    else if(username && password) {
+    else if(username && password ) {
         try {
-            let res = await auth.signInWithEmailAndPassword(username, password)
+            let res = null
+            if (register === true) {
+                console.log('trying')
+                console.log(username,password)
+                try {
+                    res = await Firebase.auth().createUserWithEmailAndPassword(username, password)
+                    console.log(res)
+                }
+                catch (e) {
+                    console.log(e)
+                }
+            }
+            else if (register === false) {
+                res = await Firebase.auth().signInWithEmailAndPassword(username, password)
+            }
+
             let final = await addUserToFirebase(res)
+            console.log(final)
             if (final) {
                 info = final
             }
@@ -45,6 +59,7 @@ export let login = async (googleUser, username = undefined, password = undefined
     }
 
     if(info.hasOwnProperty('result')) {
+        console.log(info.signIn)
         if (info.signIn === true)
             return ({firstLogin: info, screenName: 'SetBattleTagScreen', userId: info.result})
         else if (info.signIn === false) {
@@ -54,4 +69,8 @@ export let login = async (googleUser, username = undefined, password = undefined
     else
         return info
 
+}
+
+export const logOut = () => {
+    Firebase.auth().signOut().then(()=>console.log('success')).catch((error)=>{console.log(error)})
 }

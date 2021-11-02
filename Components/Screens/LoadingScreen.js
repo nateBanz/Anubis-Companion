@@ -26,6 +26,6 @@ export const LoadingScreen = (props) => {
 
     }, [newLoading])
     return (
-        <ActivityIndicator size ='large'/>
+        <ActivityIndicator size ='large' color = {'#C66C3B'}/>
     )
 }

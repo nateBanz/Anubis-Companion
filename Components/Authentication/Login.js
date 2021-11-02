@@ -2,7 +2,10 @@ import React, {useContext, useRef, useState} from 'react';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {Video} from "expo-av";
-import {TouchableOpacity, SafeAreaView, StyleSheet, View} from "react-native";
+import {TouchableOpacity, StyleSheet, View} from "react-native";
+import {
+    SafeAreaView,
+} from 'react-native-safe-area-context';
 import OverLogo from "../Assets/OverLogo";
 import {Text} from "@ui-kitten/components";
 import {GoogleSocialButton} from "react-native-social-buttons";

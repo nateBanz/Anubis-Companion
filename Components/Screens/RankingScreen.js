@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from "react-native";
-import {SafeAreaView} from "react-native";
+import {
+    SafeAreaView,
+} from 'react-native-safe-area-context';
 import {Layout} from "@ui-kitten/components";
 import {TopHeaderBar} from "../Assets/TopHeaderBar";
 import {Image} from "react-native";
@@ -9,6 +11,7 @@ import {AntDesign, Entypo, MaterialCommunityIcons} from "@expo/vector-icons";
 import {AnubisContext} from "../State/Context";
 import {LoadingScreen} from "./LoadingScreen";
 import {isEmptyArray} from "formik";
+
 
 export const RankingScreen = ({navigation}) => {
 
@@ -190,8 +193,8 @@ export const RankingScreen = ({navigation}) => {
                     alignSelf: 'center'
 
                 }}
-                    activeOpacity = {.5}
-                    onPress={move}
+                    activeOpacity = {.2}
+                    onPress={()=>navigation.navigate('Suggestions')}
                     >
 
                     <Text> <Entypo name="arrow-long-right" size={24} color="white" /> </Text>

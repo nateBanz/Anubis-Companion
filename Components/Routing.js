@@ -50,7 +50,8 @@ export const Routing = () => {
                     <Tab.Navigator
                         tabBarOptions = {{
                             activeBackgroundColor: '#C66C3B',
-                            activeTintColor: '#ffffff'
+                            activeTintColor: '#ffffff',
+                            keyboardHidesTabBar: true
                         }}
                         appearance={{
                             shadow: true,

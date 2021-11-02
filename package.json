@@ -7,9 +7,11 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@feedback-fish/react": "^1.2.1",
     "@react-native-community/masked-view": "^0.1.11",
     "expo": "~42.0.1",
     "expo-auth-session": "^3.3.1",
+    "expo-av": "~9.2.3",
     "expo-random": "~11.2.0",
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
@@ -23,14 +25,13 @@
     "react-native-animated-nav-tab-bar": "^3.1.4",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-reanimated": "~2.2.0",
+    "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-social-buttons": "^1.2.0",
     "react-native-svg": "12.1.1",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
-    "react-social-login-buttons": "^3.5.1",
-    "react-native-safe-area-context": "3.2.0",
-    "expo-av": "~9.2.3"
+    "react-social-login-buttons": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

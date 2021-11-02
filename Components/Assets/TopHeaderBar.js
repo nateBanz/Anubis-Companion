@@ -3,15 +3,12 @@ import React, {useContext} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import {TouchableOpacity} from "react-native-gesture-handler";
 import {AnubisContext} from "../State/Context";
+import {logOut} from "../../databaseConfig/FirebaseHelper";
 
 export const TopHeaderBar = (props)=> {
     const { state: { isSignedIn }, dispatch } = useContext(AnubisContext)
     function logout() {
-        fetch('http://192.168.86.66:3000/login/logout/',
-            {method: 'POST',
-                headers: {'Content-Type': 'application/json'}})
-            .then((res) => res.json())
-            .catch(err => console.log(err))
+        logOut()
         dispatch({isSignedIn: false})
     }
     return (
