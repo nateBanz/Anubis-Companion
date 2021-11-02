@@ -18,7 +18,6 @@ export const RankingScreen = ({navigation}) => {
     const [differences, setDifferences] = useState([])
     const { state: { isLoading, rankings, suggestedRanking}, dispatch } = useContext(AnubisContext)
     const move = () => {
-        console.log('hello')
         navigation.navigate('Suggestions')
     }
     const creatediff = (diff) => {

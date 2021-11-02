@@ -8,21 +8,13 @@ import {AnubisContext} from "../State/Context";
 import {ExpandedCard} from "../ExpandedCard";
 
 export const DetailScreen = (props) => {
-    const { state: { topThreeStats, bottomThreeStats, rankings }, dispatch } = useContext(AnubisContext)
-//image and then text ~simple!
-    const [topData, setTopData] = useState()
-    const [bottomData, setBottomData] = useState()
+    const {state: {topThreeStats, bottomThreeStats, rankings}, dispatch} = useContext(AnubisContext)
 
-    const getStats = ()=> {
-
-    }
     const detailScreen = StyleSheet.create({
         mainContainer: {
             justifyContent: 'flex-start',
             marginTop: 25,
             marginHorizontal: 0
-
-
         },
 
         videoContainer: {
@@ -38,37 +30,44 @@ export const DetailScreen = (props) => {
 
     const renderItem = ({item, index}) => {
         return (
-            <ExpandedCard index = {index} item = {item}/>
-
+            <ExpandedCard index={index} item={item}/>
         )
     }
-    useEffect(()=>{
+    useEffect(() => {
     }, [])
     return (
-        <SafeAreaView style = {{flex: 1}}>
-            <View style = {{ alignItems: 'center', justifyContent: 'center'}}>
-                <TopHeaderBar title = 'Detailed Stats'></TopHeaderBar>
+        <SafeAreaView style={{flex: 1}}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <TopHeaderBar title='Detailed Stats'></TopHeaderBar>
             </View>
 
-            <ScrollView contentContainerStyle = {detailScreen.mainContainer}>
+            <ScrollView contentContainerStyle={detailScreen.mainContainer}>
 
-                <Text style = {{color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 15, marginLeft: 10}}>Top Statistics</Text>
-                <View style = {detailScreen.videoContainer}>
+                <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 15, marginLeft: 10}}>Top
+                    Statistics</Text>
+                <View style={detailScreen.videoContainer}>
                     <FlatList
-                    data = {topThreeStats}
-                    horizontal
-                    renderItem = {renderItem}
-                    keyExtractor = {item=> (item[0].toString())}>
+                        data={topThreeStats}
+                        horizontal
+                        renderItem={renderItem}
+                        keyExtractor={item => (item[0].toString())}>
                     </FlatList>
                 </View>
 
-                <Text style = {{color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 15, marginTop: 25, marginLeft: 10}}>Bottom Statistics</Text>
-                <View style = {detailScreen.videoContainer}>
+                <Text style={{
+                    color: 'white',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    marginBottom: 15,
+                    marginTop: 25,
+                    marginLeft: 10
+                }}>Bottom Statistics</Text>
+                <View style={detailScreen.videoContainer}>
                     <FlatList
-                        data = {bottomThreeStats}
+                        data={bottomThreeStats}
                         horizontal
-                        renderItem = {renderItem}
-                        keyExtractor = {item=> (item[0].toString())}>
+                        renderItem={renderItem}
+                        keyExtractor={item => (item[0].toString())}>
                     </FlatList>
                 </View>
             </ScrollView>

@@ -1,9 +1,9 @@
-import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React, {useEffect, useState} from 'react'
-import {AntDesign, Entypo, FontAwesome} from '@expo/vector-icons';
-import {Image} from "react-native";
-import { Video, AVPlaybackStatus } from 'expo-av';
+import {FontAwesome} from '@expo/vector-icons';
+import {Video} from 'expo-av';
 import {LayoutAnimation, UIManager} from "react-native-web";
+
 export const ExpandedCard = (props)=> {
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});

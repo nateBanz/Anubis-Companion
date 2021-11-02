@@ -11,6 +11,7 @@ import {SafeAreaView} from "react-native";
 import OverLogo from "../Assets/OverLogo";
 import {TextInput, TouchableOpacity} from "react-native-gesture-handler";
 import {Formik} from "formik";
+import {login} from "../../databaseConfig/FirebaseHelper";
 
 export const SignIn = ({navigation}) => {
     //write a function to get the users profile to check if they already have data in the database. If so set sign in
@@ -26,11 +27,7 @@ const { state: { userId }, dispatch } = useContext(AnubisContext)
         console.log(response)
         if (response?.type === 'success') {
             const { id_token } = response.params;
-            fetch('https://anubis-companion.herokuapp.com/login/',
-                {method: 'POST',
-                        body: JSON.stringify({id_token}),
-                        headers: {'Content-Type': 'application/json'}})
-                .then((response)=> (response.json()))
+            login(id_token)
                 .then((logged) => {
                     if(logged.hasOwnProperty('userId')) {
                         console.log('done')

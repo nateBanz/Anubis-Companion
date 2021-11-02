@@ -11,6 +11,7 @@ import {ImageBackground, View} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import {SetBattleTagScreen} from "./Screens/SetBattleTagScreen";
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
+import {SignIn} from "./Authentication/SignIn";
 
 
 const Stack = createStackNavigator();
@@ -33,6 +34,9 @@ export const Routing = () => {
                         <Stack.Navigator>
                             <>
                                 <Stack.Screen name="Login" component={Login} options={{
+                                headerShown: false,
+                                }}/>
+                                <Stack.Screen name="SignIn" component={SignIn} options={{
                                     headerShown: false,
                                 }}/>
                                 <Stack.Screen name="SetBattleTagScreen" component={SetBattleTagScreen} options={{
