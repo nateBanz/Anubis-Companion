@@ -16,7 +16,7 @@ export const LoadingScreen = (props) => {
                 .then((res) => res.json())
                 .catch(err => console.log(err))
                 .then(final => {
-                    dispatch ({rankings: JSON.parse(final[0])});
+                    dispatch({rankings: JSON.parse(final[0])});
                     dispatch({suggestedRanking: JSON.parse(final[1]) });
                     dispatch({topThreeStats: JSON.parse(final[2]) });
                     dispatch({bottomThreeStats: JSON.parse(final[3])});

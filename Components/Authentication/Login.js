@@ -2,10 +2,7 @@ import React, {useContext, useRef, useState} from 'react';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {Video} from "expo-av";
-import {TouchableOpacity, StyleSheet, View} from "react-native";
-import {
-    SafeAreaView,
-} from 'react-native-safe-area-context';
+import {TouchableOpacity, StyleSheet, View, SafeAreaView} from "react-native";
 import OverLogo from "../Assets/OverLogo";
 import {Text} from "@ui-kitten/components";
 import {GoogleSocialButton} from "react-native-social-buttons";
@@ -142,10 +139,10 @@ export const Login = ({navigation}) => {
                         backgroundColor: '#C66C3B',
                         borderRadius: 30,
                         borderColor: '#FFFFFF',
-                        maxHeight: 50,
+                        maxHeight: 60,
                         flex: 1,
                         textAlign: 'center'
-                    }}x
+                    }}
                     onPress = {()=>(navigation.navigate('SignIn'))}
                     >
                     <Text style = {{color: 'white', fontSize: 15}}> Sign In/Sign Up with Email </Text>
